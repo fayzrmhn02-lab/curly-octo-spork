@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Untukmu, Ariska 💖</title>
+    <style>
+        /* CSS untuk styling umum dan animasi */
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+        
+        body {
+            background-color: #ffc0cb; /* Warna pink romantis */
+            color: #fff;
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .slide-text {
+            font-size: clamp(1.5rem, 5vw, 3rem);
+            line-height: 1.5;
+            margin: 0;
+            white-space: pre-wrap;
+        }
+
+        #slide1, #slide4 {
+            font-size: clamp(2rem, 8vw, 5rem);
+            color: #ff69b4;
+        }
+
+        #slide3 .typing-text {
+            border-right: 2px solid #fff;
+            animation: blink-caret 0.75s step-end infinite;
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #fff; }
+        }
+
+        /* Animasi hujan hati */
+        .heart {
+            position: absolute;
+            background-color: #ff69b4; /* Pink gelap */
+            transform: rotate(-45deg);
+            z-index: -1;
+            animation: fall linear infinite;
+        }
+
+        .heart::before, .heart::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: inherit;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -50%;
+            left: 0;
+        }
+
+        .heart::after {
+            top: 0;
+            left: 50%;
+        }
+        
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(-45deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(-45deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="background-audio" src="Untuk Mencintaimu.mp3" preload="auto"></audio>
+
+    <div id="slide1" class="slide" style="display: flex;">
+        <h1 class="slide-text">tap di mana aja sayang</h1>
+    </div>
+
+    <div id="slide2" class="slide">
+        <p class="slide-text">tap sekali lagi hihi becanda dikit kalii yeeee caca aku yang cantik</p>
+    </div>
+
+    <div id="slide3" class="slide">
+        <p class="slide-text typing-text"></p>
+    </div>
+
+    <div id="slide4" class="slide">
+        <h1 class="slide-text">i love u cinderellaku</h1>
+    </div>
+
+    <script>
+        const slides = ['slide1', 'slide2', 'slide3', 'slide4'];
+        let currentSlideIndex = 0;
+        const audio = document.getElementById('background-audio');
+        const typingTextElement = document.querySelector('#slide3 .typing-text');
+        const fullText = `meski jarak memisahkan dan waktu terasa begitu lama, tetaplah jaga hati dan kesehatan, karena pertemuan indah nanti akan terasa lebih berharga ketika kita sama-sama kuat dan tegar. jangan biarkan rindu membuatmu lelah, tetapi biarkan ia menjadi penguat bahwa cinta ini mampu bertahan melewati jarak. tetap semangat, makan teratur, istirahat cukup, dan ingatlah bahwa di ujung penantian ini ada aku yang selalu mendoakanmu sehat, bahagia, dan tersenyum saat akhirnya kita bertemu wahai cinderellaku ariska yang cantik.
+walau tak bisa menggenggam tanganmu saat ini, percayalah setiap detik hatiku selalu mengarah kepadamu. kita mungkin jauh, tapi rasa sayang ini tak pernah mengenal jarak. aku akan terus menjaga hatiku untukmu, merangkai doa di setiap malam agar kamu selalu dilindungi, dijaga kesehatannya, dan diselimuti kebahagiaan. sampai tiba saatnya kita duduk berdampingan, saling menatap mata penuh cinta, dan tahu bahwa semua penantian ini tidak pernah sia-sia. _ Aji - tap lagi`;
+
+        document.body.addEventListener('click', () => {
+            currentSlideIndex++;
+            showSlide(currentSlideIndex);
+        });
+
+        function showSlide(index) {
+            // Sembunyikan semua slide
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.style.display = 'none';
+            });
+            
+            // Tampilkan slide yang sesuai
+            if (index < slides.length) {
+                const currentSlide = document.getElementById(slides[index]);
+                currentSlide.style.display = 'flex';
+                
+                // Logika khusus untuk slide 3
+                if (slides[index] === 'slide3') {
+                    playAudio();
+                    startTypingAnimation();
+                    startHeartRain();
+                } else {
+                    stopAudio();
+                    stopHeartRain();
+                }
+            }
+        }
+
+        function playAudio() {
+            if (audio) {
+                audio.play().catch(error => {
+                    console.log("Audio playback failed:", error);
+                    // Handle autoplay policy by showing a play button if needed
+                });
+                audio.loop = true;
+            }
+        }
+
+        function stopAudio() {
+            if (audio) {
+                audio.pause();
+                audio.currentTime = 0;
+            }
+        }
+
+        let typingTimeout;
+        function startTypingAnimation() {
+            typingTextElement.textContent = '';
+            let charIndex = 0;
+            function type() {
+                if (charIndex < fullText.length) {
+                    typingTextElement.textContent += fullText.charAt(charIndex);
+                    charIndex++;
+                    typingTimeout = setTimeout(type, 50); // Kecepatan ketik
+                } else {
+                    typingTextElement.style.borderRight = 'none';
+                }
+            }
+            clearTimeout(typingTimeout);
+            type();
+        }
+
+        let heartInterval;
+        function startHeartRain() {
+            heartInterval = setInterval(createHeart, 200);
+        }
+
+        function stopHeartRain() {
+            clearInterval(heartInterval);
+            document.querySelectorAll('.heart').forEach(heart => heart.remove());
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            document.body.appendChild(heart);
+
+            const size = Math.random() * 20 + 10;
+            heart.style.width = `${size}px`;
+            heart.style.height = `${size}px`;
+            heart.style.left = `${Math.random() * 100}vw`;
+            heart.style.animationDuration = `${Math.random() * 2 + 3}s`;
+            heart.style.animationDelay = `${Math.random() * 1}s`;
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
